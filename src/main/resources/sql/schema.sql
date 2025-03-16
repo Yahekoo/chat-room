@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS users(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    nickname VARCHAR(255),
+    age INT,
+    description VARCHAR(255)
+)
+
+CREATE TABLE IF NOT EXISTS rooms(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    room_name VARCHAR(255) NOT NULL UNIQUE,
+    description VARCHAR(255),
+    admin_only BOOLEAN DEFAULT FALSE,
+    suspended BOOLEAN DEFAULT FALSE,
+    max_users INT DEFAULT 255,
+    created_by VARCHAR(255) DEFAULT 'Anonymous_user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+
+CREATE TABLE IF NOT EXISTS room_users(
+    user_id BIGINT NOT NULL,
+    room_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, room_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+)
+
+CREATE TABLE IF NOT EXISTS messages(
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    room_id BIGINT NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+
+)
