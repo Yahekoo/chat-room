@@ -1,0 +1,4 @@
+*.jar
+*.war
+node_modules/
+.env
